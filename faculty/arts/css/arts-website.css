@@ -1,0 +1,29 @@
+/* 
+    Document   : arts-website
+    Created on : 8-Apr-2013, 9:36:50 AM
+    Author     : Amir Entezaralmahdi
+    Description:
+        Purpose of the stylesheet follows.
+*/
+#arts-unit-colour-box{
+}
+#arts-unit-colour-box .arts-colour-item{
+}
+#arts-unit-colour-box .arts-colour-item > span{
+    display: inline-block;
+    width: 110px;
+    height: 20px;
+    overflow:visible;
+}
+.wp-picker-container{
+    margin-left: 30px;
+}
+#arts-unit-colour-box .ubc-collab-textarea, #arts-unit-colour-box .ubc-collab-text-input {
+    width: 45%;
+}
+#arts-unit-colour-box .wp-picker-container .iris-picker {
+    margin-left: 120px;
+}
+#arts-apply-now-box input:text{
+    width: 50%;
+}
