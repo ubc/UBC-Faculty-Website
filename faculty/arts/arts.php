@@ -49,11 +49,13 @@ Class UBC_Arts_Theme_Options {
         //Add Apply Now button to Menu if selected
         add_filter('wp_nav_menu_items', array(__CLASS__,'add_apply_now_to_menu'), 10, 2);
         //Add Arts frontpage layout
-        add_action( 'shutdown', array(__CLASS__, 'arts_frontpage_layout' ) );
+        add_action( 'admin_footer', array(__CLASS__, 'arts_frontpage_layout' ) );
         //remove slider margin
-        add_action( 'shutdown', array(__CLASS__, 'remove_slider_margin'));
+        add_action( 'admin_footer', array(__CLASS__, 'remove_slider_margin'));
         //Select Transparent Slider
-        add_action( 'shutdown', array(__CLASS__, 'select_transparent_slider'));
+        add_action( 'admin_footer', array(__CLASS__, 'select_transparent_slider'));
+        //Select Arts 3 column sub-page layout
+        add_action( 'admin_footer', array(__CLASS__, 'select_arts_subpage_layout'));
         
     }
 
@@ -374,6 +376,10 @@ Class UBC_Arts_Theme_Options {
     
     function select_transparent_slider(){
         UBC_Collab_Theme_Options::update('slider-option', 'transparent');
+    }
+
+    function select_arts_subpage_layout(){
+        UBC_Collab_Theme_Options::update('layout', 'l3-column-pms');
     }
     /**
      * wp_head

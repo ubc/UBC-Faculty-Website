@@ -77,7 +77,7 @@ a#applybtn:hover {
 	margin-top: 25px;
 }
 
-#shadow{position:absolute;height:45px;margin-left:20px;margin-top:40px;width:380px;padding:15px 0 10px;background:url("../img/HomepageBoxShadow.jpg") no-repeat scroll 0 0 transparent;}
+#shadow{position:absolute;margin-left:20px;margin-top:40px;width:380px;padding:15px 0 10px;background:url("../img/HomepageBoxShadow.jpg") no-repeat scroll 0 0 transparent;}
 #why-unit{position:absolute;width:50%;height:45px;margin-top:-11px;margin-left:50%;padding:15px 0 10px;background:url("../img/WhyUnitButton1.png");}
 #why-unit span{color:white;text-align:center;display:inline-block;margin-left:25%}
 div.why{clear:both;margin-bottom:20px;}
