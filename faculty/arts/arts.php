@@ -414,6 +414,32 @@ Class UBC_Arts_Theme_Options {
             a#artslogo{
                 background-image:url(<?php echo plugins_url('arts-website').(UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '/img/ArtsLogoTrans.png' : '/img/ArtsLogoTrans-black.png')?>);
             }
+
+            #primary a, #primary-secondary a {
+                color: <?php echo (UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '#FFFFFF' : '#002145')?>;
+            }
+            #primary a:hover, #primary-secondary a:hover {
+                color: <?php echo (UBC_Collab_Theme_Options::get('arts-reverse-colour')=='black'? '#FFFFFF' : '#FFFFFF')?>;
+            }
+            #primary a.opened,
+            #primary-secondary a.opened,
+            #primary .accordion-heading:hover a,
+            #primary-secondary .accordion-heading:hover a{
+                color: <?php echo (UBC_Collab_Theme_Options::get('arts-reverse-colour')=='black'? '#FFFFFF' : '#FFFFFF')?>;
+            }
+            #primary .ubc7-arrow.right-arrow, #primary-secondary .ubc7-arrow.right-arrow {
+                background-position: <?php echo (UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '-1113px -227px' : '-1113px -261px')?>;
+            }
+            #primary .ubc7-arrow.down-arrow, #primary-secondary .ubc7-arrow.down-arrow {
+                background-position: <?php echo (UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '-1178px -227px' : '-1178px -261px')?>;
+            }
+            #primary .sidenav .opened .accordion-toggle .ubc7-arrow, #primary-secondary .sidenav .opened .accordion-toggle .ubc7-arrow {
+                background-position: <?php echo (UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '-1207px -226px' : '-1206x -261px')?> !important;
+            }
+            #primary .sidenav .opened .right-arrow, #primary-secondary .sidenav .opened .right-arrow {
+                background-position: <?php echo (UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '-1113px -227px' : '-1113px -227px')?> !important;
+            }
+            
             a#applybtn:hover, .hover-bg, #qlinks li a:hover {
                 background-color: <?php echo UBC_Collab_Theme_Options::get('arts-hover-colour');?>;
             }
