@@ -82,7 +82,11 @@ Class UBC_Faculty_Theme_Options {
     }
 
     function load_faculty_options(){
-        $selected_facult = UBC_Collab_Theme_Options::get('faculty');
+        if(class_exists(UBC_Collab_Theme_Options)) {
+            $selected_facult = UBC_Collab_Theme_Options::get('faculty');
+        } else{
+            $selected_facult = 'general';
+        }
         switch($selected_facult){
             case 'arts':
                 require('faculty/arts/arts.php');
