@@ -105,6 +105,14 @@ Class UBC_Arts_Theme_Options {
                 'theme_options', // Menu slug, used to uniquely identify the page; see ubc_collab_theme_options_add_page()
                 'faculty-options' // Settings section. Same as the first argument in the add_settings_section() above
         );
+        //Add Arts Slider Options
+        add_settings_field(
+                'arts-slider-options', // Unique identifier for the field for this section
+                'Arts Slider Options', // Setting field label
+                array(__CLASS__,'arts_slider_options'), // Function that renders the settings field
+                'theme_options', // Menu slug, used to uniquely identify the page; see ubc_collab_theme_options_add_page()
+                'faculty-options' // Settings section. Same as the first argument in the add_settings_section() above
+        );
         //Add Hardcoded list
         add_settings_field(
                 'arts-hardcoded-options', // Unique identifier for the field for this section
@@ -185,11 +193,33 @@ Class UBC_Arts_Theme_Options {
                 'arts-enable-apply-now' => true,
                 'arts-apply-now-text'   => 'Apply Now',
                 'arts-apply-now-url'    => '#',
+                'arts-slider-option'  => 'arts_slider_option0',
             );
 
             $options = array_merge( $options, $defaults );
 
             return $options;
+    }
+
+	/**
+     * default_arts_slider_options.
+     * Helper function to produce the Label and the Value for the arts slider options
+     * @access public
+     * @return void
+     */
+    function default_arts_slider_options(){
+
+        return array( 
+            'arts_slider_option1' => array(
+	            'value' => 'arts_slider_option1',
+	            'label' => __( 'Slider Option 1', 'arts-clf' )),
+            'arts_slider_option2' => array(
+	            'value' => 'arts_slider_option2',
+	            'label' => __( 'Slider Option 2', 'arts-clf' )),
+            'arts_slider_option0' => array(
+	            'value' => 'arts_slider_option0',
+	            'label' => __( 'Default Frontpage Slider', 'arts-clf' )),
+            );
     }
 	/**
 	 * Sanitize and validate form input. Accepts an array, return a sanitized array.
@@ -226,6 +256,12 @@ Class UBC_Arts_Theme_Options {
             $starter['arts-enable-apply-now'] = (bool)$input['arts-enable-apply-now'];
             $starter['arts-apply-now-text']   = UBC_Collab_Theme_Options::validate_text($input['arts-apply-now-text'], $starter['arts-apply-now-text'] );
             $starter['arts-apply-now-url']     = UBC_Collab_Theme_Options::validate_text($input['arts-apply-now-url'], $starter['arts-apply-now-url'] );
+
+            // Validate Slider option
+            if ( isset( $input['arts-slider-option'] ) && array_key_exists( $input['arts-slider-option'], UBC_Arts_Theme_Options::default_arts_slider_options() ) ) {
+                $starter['arts-slider-option'] = $input['arts-slider-option'];
+            }
+
 
             $output = array_merge($output, $starter);
 
@@ -331,6 +367,30 @@ Class UBC_Arts_Theme_Options {
         
     <?php
     }
+
+    /**
+     * arts_why_unit_options.
+     * Display Why-Unit options for Arts specific template
+     * @access public
+     * @return void
+     */
+    function arts_slider_options(){ ?>
+            <div class="explanation"><a href="#" class="explanation-help">Info</a>
+
+                    <div> Select which slider option you like to display for this site.</div>
+            </div>
+        <?php
+        foreach( UBC_Arts_Theme_Options::default_arts_slider_options() as $option):
+            ?>
+            <div class="frontpage-slider-option">
+                <?php UBC_Collab_Theme_Options::radio( 'arts-slider-option', $option['value'] , $option['label'] ); ?>
+                <div class="frontpage-thumbnail">
+                    <img src="<?php echo plugins_url('faculty-website').'/faculty/arts/img/'.$option['value'].'.png'; ?>"/>
+                </div><!--/frontpage-thumbnail-->
+            </div><!--/frontpage-slider-option-->
+            <?php
+        endforeach;
+    }
     /**
      * arts_apply_now_options.
      * Display Apply Now options for Arts specific template
@@ -350,8 +410,6 @@ Class UBC_Arts_Theme_Options {
                     <li>Add Apply Now button in the menu, if selected</li>
                     <li>Load Arts frontpage layout.</li>
                     <li>Remove Slider Margin</li>
-                    <li>Select Transparent Slider</li>
-                    <li>Attach Why-Unit under slider, if selected (using jQuery for now. It will need to be added as a slider on Collab)</li>
                 </ol>
             </div>
 
@@ -375,7 +433,12 @@ Class UBC_Arts_Theme_Options {
     }
     
     function select_transparent_slider(){
-        UBC_Collab_Theme_Options::update('slider-option', 'transparent');
+        //only if the default slider is not selected
+        if('arts_slider_option1' == UBC_Collab_Theme_Options::get('arts-slider-option')){
+            UBC_Collab_Theme_Options::update('slider-option', 'transparent');
+        } else if('arts_slider_option2' == UBC_Collab_Theme_Options::get('arts-slider-option')){
+            UBC_Collab_Theme_Options::update('slider-option', 'standard');
+        }
     }
 
     function select_arts_subpage_layout(){
@@ -412,7 +475,7 @@ Class UBC_Arts_Theme_Options {
                 color:<?php echo UBC_Collab_Theme_Options::get('arts-hover-colour')?>;
             }
             a#artslogo{
-                background-image:url(<?php echo plugins_url('arts-website').(UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '/img/ArtsLogoTrans.png' : '/img/ArtsLogoTrans-black.png')?>);
+                background-image:url(<?php echo plugins_url('faculty-website').(UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '/faculty/arts/img/ArtsLogoTrans.png' : '/img/ArtsLogoTrans-black.png')?>);
             }
 
             #primary a, #primary-secondary a {
@@ -473,10 +536,134 @@ Class UBC_Arts_Theme_Options {
             .accordion-heading .accordion-toggle {
                 border-left: 1px solid <?php echo UBC_Collab_Theme_Options::get('arts-gradient-colour');?> !important;
             }
+            <?php
+            //Arts Slider Option 1 styles
+            switch(UBC_Collab_Theme_Options::get('arts-slider-option')){
+                case 'arts_slider_option1':
+                    ?>
+                    /*CAROUSEL*/
+                    .transparent .carousel-caption{opacity:.92}
+                    .transparent .carousel-caption a:hover{color:white;}
+                    .transparent .carousel-caption h4{font-size:30px;line-height:30px;}
+                    .transparent .carousel-caption{height:170px;left:20px;text-align:left;bottom:-40px;top:auto;
+                        -moz-border-radius: 3px;
+                        -webkit-border-radius: 3px;
+                        -khtml-border-radius: 3px;
+                        border-radius: 3px;
+                     }
+
+                    /*.flexslider{margin-left:-15px;margin-right:-15px;}*/
+                    .flex-direction-nav, .flex-pauseplay, .flex-counter{bottom:-75px;}
+                    .flex-direction-nav .flex-prev{background-position:-1040px -221px}
+                    .flex-direction-nav .flex-next{background-position:-1108px -221px}
+                    .flex-pauseplay .flex-pause{background-position:-1074px -221px}
+                    .flex-pauseplay .flex-play{background-position:-1142px -221px}
+                    .flex-direction-nav a, .flex-pauseplay a{background-color:#002145;}
+                    .flex-direction-nav{right:15px;}
+                    .flex-pauseplay{right:45px;}
+                    .flex-direction-nav a,
+                    .flex-pauseplay a{
+                        margin-top: 25px;
+                    }
+                    #shadow{position:absolute;margin-left:20px;margin-top:40px;width:380px;padding:15px 0 10px;background:url("<?php echo plugins_url('faculty-website') . '/faculty/arts/img/HomepageBoxShadow.jpg'; ?>") no-repeat scroll 0 0 transparent;}
+                    #why-unit{position:absolute;width:50%;height:45px;margin-top:-11px;margin-left:50%;padding:15px 0 10px;background:url("<?php echo plugins_url('faculty-website') . '/faculty/arts/img/WhyUnitButton1.png'; ?>");}
+                    #why-unit span{color:white;text-align:center;display:inline-block;margin-left:25%}
+                    div.why{clear:both;margin-bottom:20px;}
+
+                    @media(max-width:861px){
+                        #shadow,#why-unit{display:none;}
+                       .transparent div.carousel-caption{left:0px;padding-bottom:20px;margin-bottom:20px;bottom:0px;border:none;border-radius:0px!important;}
+                       .flex-direction-nav, .flex-pauseplay, .flex-counter{bottom:52px;right:40px;}
+                       .transparent .flex-direction-nav{right:10px}
+                        .transparent div.carousel-caption h4{font-size:20px;line-height:22px;/*width:85%;*/}
+                       .flexslider{margin-bottom:0px;}
+                     }
+                    
+                    <?php
+                    break;
+                case 'arts_slider_option2':
+                    ?>
+                    @media(min-width:1200px ){
+                        .ubc-carousel .carousel-caption h4{ font-size: 30px;}
+                        #ubc7-carousel .carousel-caption h4,
+                        #ubc7-carousel .carousel-caption p,
+                        .ubc-carousel .carousel-caption h4,
+                        .ubc-carousel .carousel-caption p {
+                            margin-left: 290px;
+                            margin-right: 200px;
+                        }
+                    }
+                    @media(min-width: 980px) and (max-width: 1199px){
+                        .unit-logo img{
+                            width: 200px !important;
+                        }
+                        #ubc7-carousel .carousel-caption h4,
+                        #ubc7-carousel .carousel-caption p,
+                        .ubc-carousel .carousel-caption h4,
+                        .ubc-carousel .carousel-caption p {
+                            margin-left: 250px;
+                        }
+                    }
+                    .flex-direction-nav, .flex-pauseplay, .flex-counter{
+                        bottom:15px;
+                    }
+                    .ubc-carousel .carousel-caption h4{ font-size: 22px; }
+                    .ubc-carousel .carousel-caption {
+                        position: absolute;
+                        opacity: .92;
+                        background-color:<?php echo UBC_Collab_Theme_Options::get('arts-main-colour');?>;
+                    }
+                    .carousel-caption .unit-logo{
+                        position: absolute;
+                        bottom: 0;
+                        padding-left: 15px;
+                    }
+                    .ubc-carousel .carousel-caption {
+                        overflow: visible;
+                        height: 105px;
+                    }
+
+                    @media(max-width:980px){
+                        .ubc-carousel .carousel-caption {
+                            position: relative;
+                            overflow: hidden;
+                            height: 80px;
+                         }
+                         .flex-direction-nav, .flex-pauseplay, .flex-counter {
+                            bottom: 0;
+                        }
+
+
+                    }
+                    @media (max-width: 861px){
+          
+                        .flexslider .slides{
+                            margin-bottom: 20px;
+                        }
+                    }
+                   @media(max-width:980px){
+                        .carousel-caption .unit-logo{
+                            width: 130px;
+                        }
+                        #ubc7-carousel .carousel-caption h4,
+                            #ubc7-carousel .carousel-caption p,
+                            .ubc-carousel .carousel-caption h4,
+                            .ubc-carousel .carousel-caption p {
+                                margin-left: 160px;
+                       }
+                    }
+                    <?php
+                    break;
+                default:
+                    break;
+
+            }
+            //Arts Slider Option 2 styles
+            ?>
             /*end sidenav*/
             @media(max-width:980px){
                 a#artslogo{
-                    background-image:url(<?php echo plugins_url('arts-website').(UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '/img/FOA_FullLogo.png' : '/img/FOA_FullLogo-black.png')?>);
+                    background-image:url(<?php echo plugins_url('faculty-website').(UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '/faculty/arts/img/FOA_FullLogo.png' : '/faculty/arts/img/FOA_FullLogo-black.png')?>);
                 }
             }
         </style>
@@ -491,13 +678,21 @@ Class UBC_Arts_Theme_Options {
      * @return void
     */
     function wp_footer(){
-         if( is_front_page() && UBC_Collab_Theme_Options::get('arts-enable-why-unit')):
+         if( is_front_page() && UBC_Collab_Theme_Options::get('arts-enable-why-unit') && 'arts_slider_option1' == UBC_Collab_Theme_Options::get('arts-slider-option')):
+            ?>
+            <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                    $('div.flexslider').append('<a id="why-unit" href="<?php echo UBC_Collab_Theme_Options::get('arts-why-unit-url');?>" title="<?php echo UBC_Collab_Theme_Options::get('arts-why-unit-text');?>"><span><?php echo UBC_Collab_Theme_Options::get('arts-why-unit-text');?></span></a>');
+
+                 });
+                 
+            </script>
+        <?php endif;
+        if( is_front_page() && 'arts_slider_option1' == UBC_Collab_Theme_Options::get('arts-slider-option')):
             ?>
             <script type="text/javascript">
                 jQuery(document).ready(function($) {
                     $('div.flexslider').append('<div id="shadow"></div>');
-                    $('div.flexslider').append('<a id="why-unit" href="<?php echo UBC_Collab_Theme_Options::get('arts-why-unit-url');?>" title="<?php echo UBC_Collab_Theme_Options::get('arts-why-unit-text');?>"><span><?php echo UBC_Collab_Theme_Options::get('arts-why-unit-text');?></span></a>');
-
                  });
                  jQuery(document).ready(function($) {
                     $( "div.when" ).each(function( index ) {
@@ -506,6 +701,14 @@ Class UBC_Arts_Theme_Options {
                        if (datestr) $(this).html(datestr);
                      });
                      $('div.section-widget-tabbed').css('display','block'); //handles screen lag
+                 });
+            </script>
+        <?php endif;
+         if( is_front_page() && 'arts_slider_option2' == UBC_Collab_Theme_Options::get('arts-slider-option')):
+            ?>
+            <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                    $('div.carousel-caption').prepend('<div class="unit-logo"><img src="<?php echo plugins_url('faculty-website') . '/faculty/arts/img/som-logo.png'; ?>"/></div>');
                  });
             </script>
         <?php endif;
