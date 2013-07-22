@@ -528,7 +528,10 @@ Class UBC_Arts_Theme_Options {
                 border-top:1px solid <?php echo UBC_Collab_Theme_Options::get('arts-gradient-colour');?>;
             }
             .sidenav .accordion-inner{
-                background-color: <?php echo UBC_Collab_Theme_Options::get('arts-gradient-colour');?>;
+                background-color: <?php echo UBC_Collab_Theme_Options::get('arts-main-colour');?>;
+            }
+            .accordion-group, .sidenav .accordion-heading, .sidenav .single{
+                border-color: <?php echo UBC_Collab_Theme_Options::get('arts-gradient-colour');?>!important;
             }
             div.sidenav div.single, div.accordion-group{
                 background-color:<?php echo UBC_Collab_Theme_Options::get('arts-main-colour');?>;
