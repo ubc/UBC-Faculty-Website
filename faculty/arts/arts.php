@@ -461,7 +461,7 @@ Class UBC_Arts_Theme_Options {
             .hover-color{
                 color: <?php echo UBC_Collab_Theme_Options::get('arts-hover-colour')?>;
             }
-            a#artslogo, .main-bg, #qlinks a, #primary-secondary{
+            a#artslogo, .main-bg, #qlinks a{
                 background-color:<?php echo UBC_Collab_Theme_Options::get('arts-main-colour')?>;
             }
             .gradient-bg{
@@ -533,7 +533,7 @@ Class UBC_Arts_Theme_Options {
             .accordion-group, .sidenav .accordion-heading, .sidenav .single{
                 border-color: <?php echo UBC_Collab_Theme_Options::get('arts-gradient-colour');?>!important;
             }
-            div.sidenav div.single, div.accordion-group{
+            div.sidenav div.single, div.accordion-group, #leftinfo{
                 background-color:<?php echo UBC_Collab_Theme_Options::get('arts-main-colour');?>;
             }
             .accordion-heading .accordion-toggle {
