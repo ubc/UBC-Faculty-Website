@@ -518,7 +518,7 @@ Class UBC_Arts_Theme_Options {
             }
             /*sidenav*/
             /*color*/
-            .sidenav .accordion-inner a ,.sidenav.accordion{
+            .sidenav .accordion-inner a ,.sidenav.accordion, .sidenav .accordion-group .accordion-group .accordion-inner>a:last-child{
                 border-bottom: 1px solid <?php echo UBC_Collab_Theme_Options::get('arts-gradient-colour');?>;
             }
             div.sidenav a.opened{
