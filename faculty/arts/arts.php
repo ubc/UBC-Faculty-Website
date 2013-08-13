@@ -607,6 +607,20 @@ Class UBC_Arts_Theme_Options {
                             margin-left: 250px;
                         }
                     }
+                    @media(min-width: 980px){
+                        .flex-direction-nav, .flex-pauseplay{
+                            bottom:15px;
+                        }
+                        .flex-direction-nav, .flex-pauseplay, .flex-counter {
+                            height: 75px;
+                        }
+                        .flex-direction-nav a, .flex-pauseplay a , .flex-counter{
+                            margin-top: 25px;
+                        }
+                        .flex-counter {
+                            bottom: -15px !important;
+                        }
+                    }
                     .flex-direction-nav, .flex-pauseplay, .flex-counter{
                         bottom:15px;
                     }
@@ -623,9 +637,9 @@ Class UBC_Arts_Theme_Options {
                     }
                     .ubc-carousel .carousel-caption {
                         overflow: visible;
-                        height: 105px;
+                        height: 75px;
                     }
-
+                    
                     @media(max-width:980px){
                         .ubc-carousel .carousel-caption {
                             position: relative;
