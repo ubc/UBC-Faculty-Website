@@ -4,7 +4,7 @@
   Plugin Name: UBC Faculty Website
   Plugin URI:
   Description: Transforms the UBC Collab Theme into a specific faculty website | Note: This plugin will only work on wp-hybrid-clf theme
-  Version: 1
+  Version: 1.0.0
   Author: Amir Entezaralmahdi | Arts ISIT
   Licence: GPLv2
   Author URI: http://isit.arts.ubc.ca
