@@ -18,7 +18,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-    function init() {
+    public static function init() {
 
         self::$prefix = 'wp-hybrid-clf'; // function hybrid_get_prefix() is not available within the plugin
 
@@ -34,18 +34,18 @@ Class UBC_Arts_Theme_Options {
         add_action( 'init', array(__CLASS__, 'register_scripts' ), 12 );
 
         add_action( 'admin_init',array(__CLASS__, 'arts_admin' ) );
-        
+
         add_filter( 'ubc_collab_default_theme_options', array(__CLASS__, 'default_values'), 10,1 );
         add_filter( 'ubc_collab_theme_options_validate', array(__CLASS__, 'validate'), 10, 2 );
-        
+
         add_action( 'wp_head', array( __CLASS__,'wp_head' ) );
         add_action( 'wp_footer', array( __CLASS__,'wp_footer' ) );
 
         /************ Arts specifics *************/
-        
+
         //Add Arts Logo
         add_filter('wp_nav_menu_items', array(__CLASS__,'add_arts_logo_to_menu'), 10, 2);
-        
+
         //Add Apply Now button to Menu if selected
         add_filter('wp_nav_menu_items', array(__CLASS__,'add_apply_now_to_menu'), 10, 2);
         //Add Arts frontpage layout
@@ -56,7 +56,7 @@ Class UBC_Arts_Theme_Options {
         add_action( 'admin_footer', array(__CLASS__, 'select_transparent_slider'));
         //Select Arts 3 column sub-page layout
         add_action( 'admin_footer', array(__CLASS__, 'select_arts_subpage_layout'));
-        
+
     }
 
     /*
@@ -65,7 +65,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-     function arts_faculty_ui(){
+    public static function arts_faculty_ui(){
         wp_enqueue_style('arts-faculty-theme-option-style');
         wp_enqueue_script('arts-faculty-theme-option-script', array('jquery'));
      }
@@ -77,7 +77,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-    function arts_admin(){
+    public static function arts_admin(){
 
         //Add Colour options
         add_settings_field(
@@ -120,7 +120,7 @@ Class UBC_Arts_Theme_Options {
                 array(__CLASS__,'arts_hardcoded_options'), // Function that renders the settings field
                 'theme_options', // Menu slug, used to uniquely identify the page; see ubc_collab_theme_options_add_page()
                 'faculty-options' // Settings section. Same as the first argument in the add_settings_section() above
-        );  
+        );
     }
     /**
      * arts_colour_options.
@@ -128,7 +128,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-    function arts_colour_options(){ ?>
+    public static function arts_colour_options(){ ?>
 
 
 		<div class="explanation"><a href="#" class="explanation-help">Info</a>
@@ -152,11 +152,11 @@ Class UBC_Arts_Theme_Options {
                         </ul>
 		</div>   <?php
     }
-    
+
     	/**
 	 * Returns and array of reverse colours
 	 */
-	function arts_reverse_colour() {
+	public static function arts_reverse_colour() {
 		$reverse_colour = array(
 	        'white' => array(
 	            'value' => 'white',
@@ -176,7 +176,7 @@ Class UBC_Arts_Theme_Options {
      *
      * @since ubc-clf 1.0
      */
-    function default_values( $options ) {
+    public static function default_values( $options ) {
 
             if (!is_array($options)) {
                     $options = array();
@@ -207,9 +207,9 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-    function default_arts_slider_options(){
+    public static function default_arts_slider_options(){
 
-        return array( 
+        return array(
             'arts_slider_option1' => array(
 	            'value' => 'arts_slider_option1',
 	            'label' => __( 'Slider Option 1', 'arts-clf' )),
@@ -231,7 +231,7 @@ Class UBC_Arts_Theme_Options {
 	 * @return array Sanitized theme options ready to be stored in the database.
 	 *
 	 */
-	function validate( $output, $input ) {
+	public static function validate( $output, $input ) {
 
 		// Grab default values as base
 		$starter = UBC_Arts_Theme_Options::default_values( array() );
@@ -277,7 +277,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-    function register_scripts() {
+    public static function register_scripts() {
     	self::$add_script = true;
 		// register the spotlight functions
         if( !is_admin() ):
@@ -297,14 +297,14 @@ Class UBC_Arts_Theme_Options {
 			return;
 
 		wp_print_scripts( 'ubc-collab-arts' );
-	}    
+	}
     /**
      * add_arts_logo_to_menu
      * Adds the Arts logo to primary menu
      * @access public
      * @return menu items
      */
-      function add_arts_logo_to_menu ( $items, $args ) {
+    public static function add_arts_logo_to_menu ( $items, $args ) {
             if ($args->theme_location == 'primary') {
                 $items = '<a id="artslogo" href="'.self::$faculty_main_homepage.'" title="Arts" target="_blank">&nbsp;</a>'.$items;
             }
@@ -317,7 +317,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return menu items
      */
-        function add_apply_now_to_menu( $items, $args ){
+    public static function add_apply_now_to_menu( $items, $args ){
             if ($args->theme_location == 'primary') {
                 if(UBC_Collab_Theme_Options::get('arts-enable-apply-now')){
                     $items .= '<a id="applybtn" href="'.UBC_Collab_Theme_Options::get('arts-apply-now-url').'" title="Apply Now">'.UBC_Collab_Theme_Options::get('arts-apply-now-text').'</a>';
@@ -326,14 +326,14 @@ Class UBC_Arts_Theme_Options {
             return $items;
         }
 
-        
+
     /**
      * arts_apply_now_options.
      * Display Apply Now options for Arts specific template
      * @access public
      * @return void
      */
-    function arts_apply_now_options(){ ?>
+    public static function arts_apply_now_options(){ ?>
             <div class="explanation"><a href="#" class="explanation-help">Info</a>
 
                     <div> An optional button to be appended to the main navigation menu that will link to the specified application page</div>
@@ -353,7 +353,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-    function arts_why_unit_options(){ ?>
+    public static function arts_why_unit_options(){ ?>
             <div class="explanation"><a href="#" class="explanation-help">Info</a>
 
                     <div> By enabling this option, a "why unit" bar will be attached to the slider that links to the specified page.</div>
@@ -364,7 +364,7 @@ Class UBC_Arts_Theme_Options {
                 <div class="half arts-why-inputs"><?php UBC_Collab_Theme_Options::text('arts-why-unit-text', 'Label text'); ?></div>
                 <div class="half arts-why-inputs"><?php UBC_Collab_Theme_Options::text('arts-why-unit-url', 'URL'); ?></div>
             </div>
-        
+
     <?php
     }
 
@@ -374,7 +374,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-    function arts_slider_options(){ ?>
+    public static function arts_slider_options(){ ?>
             <div class="explanation"><a href="#" class="explanation-help">Info</a>
 
                     <div> Select which slider option you like to display for this site.</div>
@@ -397,7 +397,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-    function arts_hardcoded_options(){ ?>
+    public static function arts_hardcoded_options(){ ?>
             <div class="explanation"><a href="#" class="explanation-help">Info</a>
 
                     <div> The following are the description of hardcoded items in the Arts sites.</div>
@@ -417,22 +417,22 @@ Class UBC_Arts_Theme_Options {
     UBC_Arts_Theme_Options::arts_defaults();
     }
     //REVIEW THIS
-    function arts_defaults(){
+    public static function arts_defaults(){
         UBC_Collab_Theme_Options::update('clf-unit-colour', '#6D6E70');
     }
-    function arts_frontpage_layout(){
+    public static function arts_frontpage_layout(){
         UBC_Collab_Theme_Options::update('frontpage-layout', 'layout-option5');
         // apply the right width divs to the columns
         //remove_filter( 'ubc_collab_sidebar_class', array(__CLASS__, 'add_sidebar_class' ), 10, 2 );
-        remove_filter('ubc_collab_sidebar_class', $sidebar_class,  'frontpage');
-    add_filter( 'ubc_collab_sidebar_class', array(__CLASS__, 'add_sidebar_class' ), 10, 2 );
+        // remove_filter('ubc_collab_sidebar_class', $sidebar_class,  'frontpage');
+        add_filter( 'ubc_collab_sidebar_class', array(__CLASS__, 'add_sidebar_class' ), 10, 2 );
     }
-    
-    function remove_slider_margin(){
+
+    public static function remove_slider_margin(){
         UBC_Collab_Theme_Options::update('slider-remove-margin', 1);
     }
-    
-    function select_transparent_slider(){
+
+    public static function select_transparent_slider(){
         //only if the default slider is not selected
         if('arts_slider_option1' == UBC_Collab_Theme_Options::get('arts-slider-option')){
             UBC_Collab_Theme_Options::update('slider-option', 'transparent');
@@ -441,7 +441,7 @@ Class UBC_Arts_Theme_Options {
         }
     }
 
-    function select_arts_subpage_layout(){
+    public static function select_arts_subpage_layout(){
         UBC_Collab_Theme_Options::update('layout', 'l3-column-pms');
     }
     /**
@@ -450,7 +450,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
      */
-        function wp_head(){ ?>
+    public static function wp_head(){ ?>
         <style type="text/css" media="screen">
             .gradient-color{
                 color: <?php echo UBC_Collab_Theme_Options::get('arts-gradient-colour')?>;
@@ -502,7 +502,7 @@ Class UBC_Arts_Theme_Options {
             #primary .sidenav .opened .right-arrow, #primary-secondary .sidenav .opened .right-arrow {
                 background-position: <?php echo (UBC_Collab_Theme_Options::get('arts-reverse-colour')=='white'? '-1113px -227px' : '-1113px -227px')?> !important;
             }
-            
+
             a#applybtn:hover, .hover-bg, #qlinks li a:hover {
                 background-color: <?php echo UBC_Collab_Theme_Options::get('arts-hover-colour');?>;
             }
@@ -581,7 +581,7 @@ Class UBC_Arts_Theme_Options {
                         .transparent div.carousel-caption h4{font-size:20px;line-height:22px;/*width:85%;*/}
                        .flexslider{margin-bottom:0px;}
                      }
-                    
+
                     <?php
                     break;
                 case 'arts_slider_option2':
@@ -639,7 +639,7 @@ Class UBC_Arts_Theme_Options {
                         overflow: visible;
                         height: 75px;
                     }
-                    
+
                     @media(max-width:980px){
                         .ubc-carousel .carousel-caption {
                             position: relative;
@@ -653,7 +653,7 @@ Class UBC_Arts_Theme_Options {
 
                     }
                     @media (max-width: 861px){
-          
+
                         .flexslider .slides{
                             margin-bottom: 20px;
                         }
@@ -685,7 +685,7 @@ Class UBC_Arts_Theme_Options {
             }
         </style>
     <?php
-    } 
+    }
 
 
     /**
@@ -694,7 +694,7 @@ Class UBC_Arts_Theme_Options {
      * @access public
      * @return void
     */
-    function wp_footer(){
+    public static function wp_footer(){
          if( is_front_page() && UBC_Collab_Theme_Options::get('arts-enable-why-unit') && 'arts_slider_option1' == UBC_Collab_Theme_Options::get('arts-slider-option')):
             ?>
             <script type="text/javascript">
@@ -702,7 +702,7 @@ Class UBC_Arts_Theme_Options {
                     $('div.flexslider').append('<a id="why-unit" href="<?php echo UBC_Collab_Theme_Options::get('arts-why-unit-url');?>" title="<?php echo UBC_Collab_Theme_Options::get('arts-why-unit-text');?>"><span><?php echo UBC_Collab_Theme_Options::get('arts-why-unit-text');?></span></a>');
 
                  });
-                 
+
             </script>
         <?php endif;
         if( is_front_page() && 'arts_slider_option1' == UBC_Collab_Theme_Options::get('arts-slider-option')):

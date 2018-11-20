@@ -17,53 +17,54 @@ Class UBC_Faculty_Theme_Options {
 
     /**
      * init function.
-     * 
+     *
      * @access public
      * @return void
      */
-    function init() {
-		
+    public static function init() {
+
         self::$prefix = 'wp-hybrid-clf'; // function hybrid_get_prefix() is not available within the plugin
-        
+
         $theme = wp_get_theme();
-       	
+
         if( "UBC Collab" != $theme->name )
         	return true;
-        // include general faculty plugin specific css file
-        wp_register_style('faculty-theme-option-style', plugins_url('faculty-website') . '/css/style.css');
-        // include general faculty plugin specific javascript file
-        wp_register_script('faculty-theme-option-script', plugins_url('faculty-website') . '/js/script.js');
 
         add_action('ubc_collab_theme_options_ui', array(__CLASS__, 'faculty_ui'));
-        
+
         add_action( 'admin_init',array(__CLASS__, 'admin' ) );
 
         add_action( 'init',array(__CLASS__, 'load_faculty_options' ) );
-        
+
         add_filter( 'ubc_collab_default_theme_options', array(__CLASS__, 'default_values'), 10,1 );
         add_filter( 'ubc_collab_theme_options_validate', array(__CLASS__, 'validate'), 10, 2 );
-      	
+
     }
-   
-        
+
+
     /*
      * This function includes the css and js for this specifc admin option
      *
      * @access public
      * @return void
      */
-     function faculty_ui(){
+     public static function faculty_ui(){
+         // include general faculty plugin specific css file
+        wp_register_style('faculty-theme-option-style', plugins_url('faculty-website') . '/css/style.css');
+        // include general faculty plugin specific javascript file
+        wp_register_script('faculty-theme-option-script', plugins_url('faculty-website') . '/js/script.js');
+
         wp_enqueue_style('faculty-theme-option-style');
         wp_enqueue_script('faculty-theme-option-script', array('jquery'));
      }
-     
+
     /**
      * admin function.
-     * 
+     *
      * @access public
      * @return void
      */
-    function admin(){
+    public static function admin(){
         //Add Arts Options tab in the theme options
         add_settings_section(
                 'faculty-options', // Unique identifier for the settings section
@@ -78,11 +79,11 @@ Class UBC_Faculty_Theme_Options {
                 array(__CLASS__,'faculty_selection_options'), // Function that renders the settings field
                 'theme_options', // Menu slug, used to uniquely identify the page; see ubc_collab_theme_options_add_page()
                 'faculty-options' // Settings section. Same as the first argument in the add_settings_section() above
-        );     
+        );
     }
 
-    function load_faculty_options(){
-        if(class_exists(UBC_Collab_Theme_Options)) {
+    public static function load_faculty_options(){
+        if( class_exists( 'UBC_Collab_Theme_Options' ) ) {
             $selected_facult = UBC_Collab_Theme_Options::get('faculty');
         } else{
             $selected_facult = 'general';
@@ -108,7 +109,7 @@ Class UBC_Faculty_Theme_Options {
      * @access public
      * @return void
      */
-	function faculty_list() {
+	public static function faculty_list() {
 
 		$faculty_list = array(
 	        'arts' => array(
@@ -138,7 +139,7 @@ Class UBC_Faculty_Theme_Options {
      * @access public
      * @return void
      */
-    function faculty_selection_options(){ ?>
+    public static function faculty_selection_options(){ ?>
 
 
 		<div class="explanation"><a href="#" class="explanation-help">Info</a>
@@ -152,21 +153,21 @@ Class UBC_Faculty_Theme_Options {
             ?>
             </select> <p><input id="submit-buttom" class="button-primary faculty-select-input" type="submit" value="Load Faculty Settings" name="submit"></p>
 		</div>
-            
+
             <?php
         //UBC_Collab_Theme_Options_Admin::admin_page();
     }
- 
-    /*********** 
+
+    /***********
      * Default Options
-     * 
+     *
      * Returns the options array for arts.
      *
      * @since ubc-clf 1.0
      */
-    function default_values( $options ) {
+    public static function default_values( $options ) {
 
-            if (!is_array($options)) { 
+            if (!is_array($options)) {
                     $options = array();
             }
 
@@ -178,7 +179,7 @@ Class UBC_Faculty_Theme_Options {
             $options = array_merge( $options, $defaults );
 
             return $options;
-    }  
+    }
 	/**
 	 * Sanitize and validate form input. Accepts an array, return a sanitized array.
 	 *
@@ -189,19 +190,19 @@ Class UBC_Faculty_Theme_Options {
 	 * @return array Sanitized theme options ready to be stored in the database.
 	 *
 	 */
-	function validate( $output, $input ) {
-		
+	public static function validate( $output, $input ) {
+
 		// Grab default values as base
 		$starter = UBC_Faculty_Theme_Options::default_values( array() );
-		
-            
+
+
             // Validate Faculty selection
             if ( isset( $input['faculty'] ) && array_key_exists( $input['faculty'], UBC_Faculty_Theme_Options::faculty_list()) ) {
 	        $starter['faculty'] = $input['faculty'];
 	    }
             $output = array_merge($output, $starter);
 
-            return $output;            
+            return $output;
         }
 }
 
